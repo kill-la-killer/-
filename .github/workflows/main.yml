@@ -1,14 +1,23 @@
-name: Kali Linux - SSH
+name: Kali - SSHX & Bore
 on: workflow_dispatch
 
 jobs:
-  build:
+  kali-job:
     runs-on: ubuntu-latest
     steps:
-      - name: Instalando Kali via Docker
+      - name: Setup Kali Linux via Docker
         run: |
           docker pull kalilinux/kali-rolling
-          docker run -d --name kali-box kalilinux/kali-rolling tail -f /dev/null
-      
-      - name: Setup tmate session (Acesso via Terminal)
-        uses: mxschmitt/action-tmate@v3
+          # Inicia o container em segundo plano
+          docker run -d --name kali_vps kalilinux/kali-rolling tail -f /dev/null
+
+      - name: Instalar Bore (Port Forwarding)
+        run: |
+          curl -Ls https://github.com/ekzhang/bore/releases/download/v0.5.1/bore-v0.5.1-x86_64-unknown-linux-musl.tar.gz | tar zx -C /usr/local/bin
+          # O bore pode ser usado para expor uma porta específica se você subir um serviço dentro do Kali
+          bore local 80 & 
+
+      - name: Iniciar SSHX (Acesso ao Terminal)
+        run: |
+          curl -sSf https://sshx.io/get.sh | sh
+          sshx
