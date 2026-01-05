@@ -17,6 +17,11 @@ jobs:
 
       - name: Iniciar SSHX e Manter Vivo
         run: |
-          curl -sSf https://sshx.io/get | sh -s run
+          # Usando o comando que você enviou
+          curl -sSf https://sshx.io/get | sh -s run &
+          
           echo "Aguardando conexões... A VPS não vai fechar agora."
-          sleep 216000
+          echo "Conecte via Bore usando a porta exibida no log anterior."
+          
+          # Loop infinito (limitado a 6h pelo GitHub Actions)
+          sleep 21600
