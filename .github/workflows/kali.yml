@@ -1,4 +1,4 @@
-name: Kali - SSHX & Bore (Fixed & Loop)
+name: Kali - SSHX & Bore kali.yml
 on: workflow_dispatch
 
 jobs:
