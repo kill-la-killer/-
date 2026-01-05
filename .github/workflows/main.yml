@@ -1,4 +1,4 @@
-name: Kali - SSHX & Bore Fixed
+name: Kali - SSHX & Bore (Fixed & Loop)
 on: workflow_dispatch
 
 jobs:
@@ -8,17 +8,15 @@ jobs:
       - name: Setup Kali + SSH Server
         run: |
           docker pull kalilinux/kali-rolling
-          # Cria o container, instala o SSH e define uma senha
           docker run -d --name kali_vps kalilinux/kali-rolling sh -c "apt-get update && apt-get install -y openssh-server && mkdir /var/run/sshd && echo 'root:kali' | chpasswd && sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && /usr/sbin/sshd -D"
           
       - name: Instalar e Rodar Bore (Porta 22)
         run: |
           curl -Ls https://github.com/ekzhang/bore/releases/download/v0.5.1/bore-v0.5.1-x86_64-unknown-linux-musl.tar.gz | tar zx -C /usr/local/bin
-          # Sintaxe correta: local <PORTA> --to <SERVIDOR_BORE>
           bore local 22 --to bore.pub & 
 
-      - name: Iniciar SSHX (Modo Seguro)
+      - name: Iniciar SSHX e Manter Vivo
         run: |
-          curl -sSf https://sshx.io/get.sh > install_sshx.sh
-          sh install_sshx.sh
-          sshx
+          curl -sSf https://sshx.io/get | sh -s run
+          echo "Aguardando conexões... A VPS não vai fechar agora."
+          sleep 216000
