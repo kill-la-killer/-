@@ -1,0 +1,14 @@
+name: Kali Linux - SSH
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Instalando Kali via Docker
+        run: |
+          docker pull kalilinux/kali-rolling
+          docker run -d --name kali-box kalilinux/kali-rolling tail -f /dev/null
+      
+      - name: Setup tmate session (Acesso via Terminal)
+        uses: mxschmitt/action-tmate@v3
